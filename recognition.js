@@ -1,7 +1,6 @@
 import {
   GestureRecognizer,
   FilesetResolver,
-  DrawingUtils
 } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0";
 
 const demosSection = document.getElementById("demos");
@@ -30,86 +29,6 @@ const createGestureRecognizer = async () => {
   demosSection.classList.remove("invisible");
 };
 createGestureRecognizer();
-
-/********************************************************************
-// Demo 1: Detect hand gestures in images
-********************************************************************/
-
-const imageContainers = document.getElementsByClassName("detectOnClick");
-
-for (let i = 0; i < imageContainers.length; i++) {
-  imageContainers[i].children[0].addEventListener("click", handleClick);
-}
-
-async function handleClick(event) {
-  if (!gestureRecognizer) {
-    alert("Please wait for gestureRecognizer to load");
-    return;
-  }
-
-  if (runningMode === "VIDEO") {
-    runningMode = "IMAGE";
-    await gestureRecognizer.setOptions({ runningMode: "IMAGE" });
-  }
-  // Remove all previous landmarks
-  const allCanvas = event.target.parentNode.getElementsByClassName("canvas");
-  for (var i = allCanvas.length - 1; i >= 0; i--) {
-    const n = allCanvas[i];
-    n.parentNode.removeChild(n);
-  }
-
-  const results = gestureRecognizer.recognize(event.target);
-
-  // View results in the console to see their format
-  console.log(results);
-
-  if (results.gestures.length > 0) {
-    const p = event.target.parentNode.childNodes[3];
-    p.setAttribute("class", "info");
-
-    const categoryName = results.gestures[0][0].categoryName;
-    const categoryScore = parseFloat(
-      results.gestures[0][0].score * 100
-    ).toFixed(2);
-    p.innerText = `GestureRecognizer: ${categoryName}\n Confidence: ${categoryScore} %`;
-    p.style =
-      "left: 0px;" +
-      "top: " +
-      event.target.height +
-      "px; " +
-      "width: " +
-      (event.target.width - 10) +
-      "px;";
-
-    const canvas = document.createElement("canvas");
-    canvas.setAttribute("class", "canvas");
-    canvas.setAttribute("width", event.target.naturalWidth + "px");
-    canvas.setAttribute("height", event.target.naturalHeight + "px");
-    canvas.style =
-      "left: 0px;" +
-      "top: 0px;" +
-      "width: " +
-      event.target.width +
-      "px;" +
-      "height: " +
-      event.target.height +
-      "px;";
-
-    event.target.parentNode.appendChild(canvas);
-    const ctx = canvas.getContext("2d");
-    for (const landmarks of results.landmarks) {
-      drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {
-        color: "#00FF00",
-        lineWidth: 10
-      });
-      drawLandmarks(ctx, landmarks, { color: "#FF0000", lineWidth: 5 });
-    }
-  }
-}
-
-/********************************************************************
-// Demo 2: Continuously grab image from webcam stream and detect it.
-********************************************************************/
 
 const video = document.getElementById("webcam");
 const canvasElement = document.getElementById("output_canvas");
@@ -218,7 +137,6 @@ async function predictWebcam() {
   if (results.gestures.length > 0) {
     gestureOutput.style.display = "block";
     gestureOutput.style.width = videoWidth;
-    const categoryName = results.gestures[0][0].categoryName;
     const categoryScore = parseFloat(
       results.gestures[0][0].score * 100
     ).toFixed(2);

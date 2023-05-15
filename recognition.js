@@ -3,9 +3,8 @@ import {
   FilesetResolver,
 } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0";
 
-const demosSection = document.getElementById("demos");
 let gestureRecognizer = GestureRecognizer;
-let runningMode = "IMAGE";
+let runningMode = "VIDEO";
 let enableWebcamButton= HTMLButtonElement;
 let webcamRunning = false;
 const videoHeight = "360px";
@@ -26,7 +25,6 @@ const createGestureRecognizer = async () => {
     },
     runningMode: runningMode
   });
-  demosSection.classList.remove("invisible");
 };
 createGestureRecognizer();
 
@@ -81,11 +79,6 @@ let lastVideoTime = -1;
 let results = undefined;
 async function predictWebcam() {
   const webcamElement = document.getElementById("webcam");
-  // Now let's start detecting the stream.
-  if (runningMode === "IMAGE") {
-    runningMode = "VIDEO";
-    await gestureRecognizer.setOptions({ runningMode: "VIDEO" });
-  }
   let nowInMs = Date.now();
   if (video.currentTime !== lastVideoTime) {
     lastVideoTime = video.currentTime;

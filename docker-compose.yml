@@ -1,0 +1,14 @@
+version: '3'
+services:
+  client:
+    build: ./client
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+
+  server:
+    build: ./server
+    ports:
+      - '3000:3000'

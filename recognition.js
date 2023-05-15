@@ -87,28 +87,32 @@ async function predictWebcam() {
     results = gestureRecognizer.recognizeForVideo(video, nowInMs);
     fingerCount = 0;
     if (results.handednesses.length > 0) {
-      const handLandmarks = results.landmarks[0];
+      results.handednesses.forEach(function (element, index) {
 
-      if (results.handednesses[0][0].categoryName === "Right" && (handLandmarks[4].x < handLandmarks[3].x)) {
-        fingerCount++;
-      }
+        let handLabel = element[0].categoryName
+        const handLandmarks = results.landmarks[index];
 
-      if (results.handednesses[0][0].categoryName === "Left" && (handLandmarks[4].x > handLandmarks[3].x)) {
-        fingerCount++;
-      }
+        if (handLabel === "Right" && (handLandmarks[4].x < handLandmarks[3].x)) {
+          fingerCount++;
+        }
 
-      if (handLandmarks[8].y < handLandmarks[6].y) {  // Index finger
-        fingerCount++;
-      }
-      if (handLandmarks[12].y < handLandmarks[10].y) {  // Middle finger
-        fingerCount++;
-      }
-      if (handLandmarks[16].y < handLandmarks[14].y) {  // Ring finger
-        fingerCount++;
-      }
-      if (handLandmarks[20].y < handLandmarks[18].y) {  // Pinky
-        fingerCount++;
-      }
+        if (handLabel === "Left" && (handLandmarks[4].x > handLandmarks[3].x)) {
+          fingerCount++;
+        }
+
+        if (handLandmarks[8].y < handLandmarks[6].y) {  // Index finger
+          fingerCount++;
+        }
+        if (handLandmarks[12].y < handLandmarks[10].y) {  // Middle finger
+          fingerCount++;
+        }
+        if (handLandmarks[16].y < handLandmarks[14].y) {  // Ring finger
+          fingerCount++;
+        }
+        if (handLandmarks[20].y < handLandmarks[18].y) {  // Pinky
+          fingerCount++;
+        }
+    })
     }
   }
 

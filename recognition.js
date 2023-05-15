@@ -23,6 +23,8 @@ const createGestureRecognizer = async () => {
         "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task",
       delegate: "GPU"
     },
+    numHands: 2,
+    selfieMode: true,
     runningMode: runningMode
   });
 };
@@ -133,9 +135,9 @@ async function predictWebcam() {
     const categoryScore = parseFloat(
       results.gestures[0][0].score * 100
     ).toFixed(2);
-    gestureOutput.innerText = `You show : ${fingerCount}\n Confidence: ${categoryScore} %`;
+    gestureOutput.innerText = `You show : ${fingerCount} | Confidence: ${categoryScore} %`;
   } else {
-    gestureOutput.style.display = "none";
+    gestureOutput.innerText = 'You show : 0';
   }
   // Call this function again to keep predicting when the browser is ready.
   if (webcamRunning === true) {
